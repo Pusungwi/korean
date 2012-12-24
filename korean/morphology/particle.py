@@ -6,7 +6,7 @@
     :copyright: (c) 2012 by Heungsub Lee
     :license: BSD, see LICENSE for more details.
 """
-from __future__ import absolute_import
+
 
 from . import define_allomorph_picker
 from .morpheme import Morpheme
@@ -43,7 +43,7 @@ class Particle(Morpheme):
     def guess(cls, key):
         def compare(x, y):
             return -cmp(len(x[0]), len(y[0]))
-        for other_key, particle in sorted(cls._registry.items(), cmp=compare):
+        for other_key, particle in sorted(list(cls._registry.items()), cmp=compare):
             if key.startswith(other_key):
                 suffix = key[len(other_key):]
                 return cls(*(form + suffix for form in particle.forms))
@@ -71,25 +71,25 @@ class Particle(Morpheme):
         rv = []
         unique_forms = list(set(self.forms))
         for forms in zip(unique_forms[:-1], unique_forms[1:]):
-            length = map(len, forms)
+            length = list(map(len, forms))
             if len(set(length)) == 1:
                 # such as "을(를)", "를(을)", "(을)를", "(를)을"
-                rv.append(u'{0}({1})'.format(*forms))
-                rv.append(u'{1}({0})'.format(*forms))
-                rv.append(u'({0}){1}'.format(*forms))
-                rv.append(u'({1}){0}'.format(*forms))
+                rv.append('{0}({1})'.format(*forms))
+                rv.append('{1}({0})'.format(*forms))
+                rv.append('({0}){1}'.format(*forms))
+                rv.append('({1}){0}'.format(*forms))
             else:
                 # such as "(으)로"
                 x = int(length[0] > length[1])
                 args = forms[1 - x].rstrip(forms[x]), forms[x]
-                rv.append(u'({0}){1}'.format(*args))
+                rv.append('({0}){1}'.format(*args))
         return tuple(rv)
 
     def pick_allomorph_after_char(self, char):
         final = hangul.get_final(char)
         if not final:
             return self.after_vowel
-        elif final == u'ㄹ':
+        elif final == 'ㄹ':
             return self.after_rieul
         else:
             return self.after_consonant

@@ -8,7 +8,7 @@
     :copyright: (c) 2012 by Heungsub Lee
     :license: BSD, see LICENSE for more details.
 """
-from __future__ import absolute_import
+
 
 from . import hangul, l10n, morphology
 from .morphology import Morpheme, Noun, NumberWord, Loanword, Particle, \
@@ -28,17 +28,17 @@ __all__ = ['hangul', 'l10n', 'morphology', 'Morpheme', 'Noun', 'NumberWord',
 def load_data():
     import json
     import os
-    with open(os.path.join(os.path.dirname(__file__), 'data.json')) as f:
+    with open(os.path.join(os.path.dirname(__file__), 'data.json'), encoding='utf-8') as f:
         data = json.load(f)
     # register allomorphic particles
-    for forms in data['allomorphic_particles'].itervalues():
+    for forms in data['allomorphic_particles'].values():
         particle = Particle(*forms)
         for form in forms:
             Particle.register(form, particle)
     # register numbers and digits
-    for number, form in data['numbers'].iteritems():
+    for number, form in data['numbers'].items():
         NumberWord.__numbers__[int(number)] = form
-    for digit, form in data['digits'].iteritems():
+    for digit, form in data['digits'].items():
         NumberWord.__digits__[int(digit)] = form
 
 

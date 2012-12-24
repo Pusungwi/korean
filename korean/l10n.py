@@ -8,11 +8,11 @@
     :copyright: (c) 2012 by Heungsub Lee
     :license: BSD, see LICENSE for more details.
 """
-from __future__ import absolute_import
+
 from functools import partial
 from itertools import chain, product
 import re
-from StringIO import StringIO
+from io import StringIO
 
 from .morphology import Noun, NumberWord, Particle, pick_allomorph
 
@@ -41,7 +41,7 @@ class Proofreading(object):
         tokens = []
         naive_particles = []
         particle_map = {}
-        for particle in set(Particle._registry.itervalues()):
+        for particle in set(Particle._registry.values()):
             for naive in particle.naive():
                 particle_map[naive] = particle
                 naive_particles.append(naive)
@@ -79,10 +79,10 @@ class Proofreading(object):
 
 #: Default :class:`Proofreading` object. It tokenizes ``unicode`` and
 #: :class:`korean.Particle`. Use it like a function.
-proofread = Proofreading([unicode, Particle])
+proofread = Proofreading([str, Particle])
 
 
-class Template(unicode):
+class Template(str):
     """The :class:`Template` object extends :class:`unicode` and overrides
     :meth:`format` method. This can format particle format spec without
     evincive :class:`Noun` or :class:`NumberWord` arguments.
@@ -103,8 +103,8 @@ class Template(unicode):
     def format(self, *args, **kwargs):
         args = list(args)
         for seq, (key, val) in chain(product([args], enumerate(args)),
-                                     product([kwargs], kwargs.items())):
-            if isinstance(val, unicode):
+                                     product([kwargs], list(kwargs.items()))):
+            if isinstance(val, str):
                 seq[key] = Noun(val)
             elif isinstance(val, int):
                 seq[key] = NumberWord(val)

@@ -23,13 +23,13 @@ def S(*sequences):
         if not sequence:
             return (sequence,)
         return tuple(sequence)
-    return sum(map(to_tuple, sequences), ())
-VOWELS = S(u'ㅏㅐㅑㅒㅓㅔㅕㅖㅗㅘㅙㅚㅛㅜㅝㅞㅟㅠㅡㅢㅣ')
-CONSONANTS = S(u'ㄱㄲㄳㄴㄵㄶㄷㄸㄹㄺㄻㄼㄽㄾㄿㅀㅁㅂㅃㅄㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ')
-INITIALS = S(u'ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ')
-FINALS = S(u'', u'ㄱㄲㄳㄴㄵㄶㄷㄹㄺㄻㄼㄽㄾㄿㅀㅁㅂㅄㅅㅆㅇㅈㅊㅋㅌㅍㅎ')
+    return sum(list(map(to_tuple, sequences)), ())
+VOWELS = S('ㅏㅐㅑㅒㅓㅔㅕㅖㅗㅘㅙㅚㅛㅜㅝㅞㅟㅠㅡㅢㅣ')
+CONSONANTS = S('ㄱㄲㄳㄴㄵㄶㄷㄸㄹㄺㄻㄼㄽㄾㄿㅀㅁㅂㅃㅄㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ')
+INITIALS = S('ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ')
+FINALS = S('', 'ㄱㄲㄳㄴㄵㄶㄷㄹㄺㄻㄼㄽㄾㄿㅀㅁㅂㅄㅅㅆㅇㅈㅊㅋㅌㅍㅎ')
 LETTER_ELEMENTS = (INITIALS, VOWELS, FINALS)
-HANGUL_RANGE = xrange(ord(u'가'), ord(u'힣') + 1)
+HANGUL_RANGE = range(ord('가'), ord('힣') + 1)
 FIRST_HANGUL = HANGUL_RANGE[0]
 del S
 
@@ -111,4 +111,4 @@ def join_char(splitted):
         return splitted[0] or splitted[1]
     indexes = [tuple.index(*args) for args in zip(LETTER_ELEMENTS, splitted)]
     offset = (indexes[0] * len(VOWELS) + indexes[1]) * len(FINALS) + indexes[2]
-    return unichr(FIRST_HANGUL + offset)
+    return chr(FIRST_HANGUL + offset)

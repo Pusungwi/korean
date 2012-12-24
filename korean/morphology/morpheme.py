@@ -6,7 +6,7 @@
     :copyright: (c) 2012 by Heungsub Lee
     :license: BSD, see LICENSE for more details.
 """
-from __future__ import absolute_import
+
 
 from ..hangul import get_final, is_hangul
 
@@ -32,7 +32,7 @@ class MorphemeMetaclass(type):
         return super(MorphemeMetaclass, cls).__call__(*forms)
 
 
-class Morpheme(object):
+class Morpheme(object, metaclass=MorphemeMetaclass):
     """This class presents a morpheme (형태소) or allomorph (이형태). It
     can have one or more forms. The first form means the basic allomorph
     (기본형).
@@ -41,12 +41,10 @@ class Morpheme(object):
                   allomorph.
     """
 
-    __metaclass__ = MorphemeMetaclass
-
     _registry = None
 
     def __init__(self, *forms):
-        assert all([isinstance(form, unicode) for form in forms])
+        assert all([isinstance(form, str) for form in forms])
         self.forms = forms
 
     @classmethod
@@ -63,7 +61,7 @@ class Morpheme(object):
         """Every morpheme class would implement this method. They should make a
         morpheme to the valid Korean text with Hangul.
         """
-        return unicode(self)
+        return str(self)
 
     def basic(self):
         """The basic form of allomorph."""
@@ -73,16 +71,16 @@ class Morpheme(object):
         return self.basic()
 
     def __str__(self):
-        return unicode(self).encode('utf-8')
+        return str(self).encode('utf-8')
 
     def __getitem__(self, i):
-        return unicode(self)[i]
+        return str(self)[i]
 
     def __getslice__(self, start, stop, step=None):
-        return unicode(self)[start:stop:step]
+        return str(self)[start:stop:step]
 
     def __format__(self, suffix):
-        return u'{0!s}{1}'.format(self, suffix)
+        return '{0!s}{1}'.format(self, suffix)
 
     def __repr__(self):
         return '{0}({1!s})'.format(type(self).__name__, str(self))

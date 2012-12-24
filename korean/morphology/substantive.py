@@ -6,7 +6,7 @@
     :copyright: (c) 2012 by Heungsub Lee
     :license: BSD, see LICENSE for more details.
 """
-from __future__ import absolute_import
+
 import re
 
 from .morpheme import Morpheme
@@ -37,7 +37,7 @@ class Substantive(Morpheme):
         if separated_spec[0] and is_hangul(separated_spec[0][0]):
             text = merge(self, Particle(separated_spec.pop(0)))
         else:
-            text = unicode(self)
+            text = str(self)
         try:
             spec = separated_spec[0]
         except IndexError:
@@ -57,7 +57,7 @@ class Noun(Substantive):
             u'레벨사십이'
         """
         rv = []
-        for match in self.READING_PATTERN.finditer(unicode(self)):
+        for match in self.READING_PATTERN.finditer(str(self)):
             if match.group('other'):
                 rv.append(match.group('other'))
             if match.group('number'):
@@ -115,7 +115,7 @@ class NumberWord(Substantive):
                 if digit < 4 or len(phase) > 1:
                     rv.append(''.join(phase[::-1]))
                 else:
-                    rv.append(u'')
+                    rv.append('')
                 phase = []
                 if not number:
                     break
@@ -123,7 +123,7 @@ class NumberWord(Substantive):
         return tuple(rv[::-1])
 
     def basic(self):
-        return unicode(self.number)
+        return str(self.number)
 
     def __format__(self, spec):
         try:
