@@ -67,11 +67,8 @@ class Morpheme(object, metaclass=MorphemeMetaclass):
         """The basic form of allomorph."""
         return self.forms[0]
 
-    def __unicode__(self):
-        return self.basic()
-
     def __str__(self):
-        return str(self).encode('utf-8')
+        return self.basic()
 
     def __getitem__(self, i):
         return str(self)[i]
