@@ -96,7 +96,7 @@ class NumberWord(Substantive):
         rv, phase = [], []
         digit = 0
         while True:
-            single = number % 10
+            single = int(number % 10)
             if digit >= 4:
                 try:
                     phase.append(cls.__digits__[digit])
