@@ -10,6 +10,7 @@
 """
 from __future__ import absolute_import, unicode_literals
 import sys
+import codecs
 
 from . import hangul, l10n, morphology
 from .morphology import (Morpheme, Noun, NumberWord, Loanword, Particle,
@@ -35,7 +36,7 @@ def _load_data():
     """Loads allomorphic particles and number words from :file:`data.json`."""
     import json
     import os
-    with open(os.path.join(os.path.dirname(__file__), 'data.json')) as f:
+    with codecs.open(os.path.join(os.path.dirname(__file__), 'data.json'), encoding='utf-8') as f:
         data = json.load(f)
     # register allomorphic particles
     for forms in data['allomorphic_particles'].itervalues():
